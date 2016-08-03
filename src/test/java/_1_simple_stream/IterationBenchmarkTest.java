@@ -18,22 +18,17 @@ import org.openjdk.jmh.runner.options.VerboseMode;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-public class IterationTest {
+public class IterationBenchmarkTest {
     @Test
     public void launchBenchmark() throws Exception {
         Options opt = new OptionsBuilder()
-                // Specify which benchmarks to run.
-                // You can be more specific if you'd like to run only one benchmark per test.
                 .include(this.getClass().getSimpleName())
-                // Set the following options as needed
                 .mode(Mode.AverageTime)
                 .timeUnit(TimeUnit.MICROSECONDS)
-                .warmupIterations(10)
-                .measurementIterations(10)
+                .warmupIterations(5)
+                .measurementIterations(5)
                 .forks(1)
                 .shouldFailOnError(true)
-                .shouldDoGC(true)
-                .jvmArgs("-XX:+UnlockDiagnosticVMOptions")
                 .build();
 
         new Runner(opt).run();
@@ -78,7 +73,7 @@ public class IterationTest {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(IterationTest.class.getSimpleName())
+                .include(IterationBenchmarkTest.class.getSimpleName())
                 .warmupIterations(2)
                 .warmupTime(TimeValue.milliseconds(2))
                 .measurementIterations(2)

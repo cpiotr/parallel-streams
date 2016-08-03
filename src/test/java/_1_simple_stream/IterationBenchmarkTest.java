@@ -29,6 +29,7 @@ public class IterationBenchmarkTest {
                 .measurementIterations(5)
                 .forks(1)
                 .shouldFailOnError(true)
+                .shouldDoGC(false)
                 .build();
 
         new Runner(opt).run();

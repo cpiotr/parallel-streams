@@ -28,16 +28,12 @@ public class IterationTest {
                 // Set the following options as needed
                 .mode(Mode.AverageTime)
                 .timeUnit(TimeUnit.MICROSECONDS)
-                .warmupTime(TimeValue.seconds(1))
-                .warmupIterations(2)
-                .measurementTime(TimeValue.seconds(1))
-                .measurementIterations(2)
-                .threads(2)
+                .warmupIterations(10)
+                .measurementIterations(10)
                 .forks(1)
                 .shouldFailOnError(true)
                 .shouldDoGC(true)
-                //.jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:+PrintInlining")
-                //.addProfiler(WinPerfAsmProfiler.class)
+                .jvmArgs("-XX:+UnlockDiagnosticVMOptions")
                 .build();
 
         new Runner(opt).run();
@@ -55,6 +51,7 @@ public class IterationTest {
     public void sequentialIteration(BenchmarkState state, Blackhole bh) {
         for (int i = 0; i < 1_000; i++) {
             int a = i * i;
+            bh.consume(a);
         }
     }
 
@@ -64,6 +61,7 @@ public class IterationTest {
                 .limit(1_000)
                 .forEach(i -> {
                     int a = i * i;
+                    bh.consume(a);
                 });
     }
 
@@ -74,6 +72,7 @@ public class IterationTest {
                 .limit(1_000)
                 .forEach(i -> {
                     int a = i * i;
+                    bh.consume(a);
                 });
     }
 

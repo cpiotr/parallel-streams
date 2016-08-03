@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
@@ -18,33 +19,33 @@ import static org.junit.Assert.assertThat;
 public class KeepOrderTest {
     @Test
     public void shouldKeepElementsOrder() throws Exception {
-        List<Integer> list = IntStream.range(0, 10)
-                .boxed()
-                .parallel()
-                .map(i -> i * i)
-                .filter(i -> i % 2 != 0)
+        List<Integer> list = sampleParallelStream()
                 .collect(toList());
         System.out.println("list = " + list);
 
-        assertThat(list, is(sorted(Integer::compare)));
+        assertThat(list, is(sortedUsing(Integer::compare)));
     }
 
     @Test
     public void shouldScrambleElements() throws Exception {
         List<Integer> list = new ArrayList<>();
 
-        IntStream.range(0, 10)
-                .boxed()
-                .parallel()
-                .map(i -> i * i)
-                .filter(i -> i % 2 != 0)
+        sampleParallelStream()
                 .forEach(list::add);
         System.out.println("list = " + list);
 
-        assertThat(list, is(not(sorted(Integer::compare))));
+        assertThat(list, is(not(sortedUsing(Integer::compare))));
     }
 
-    private <T> Matcher<List<T>> sorted(Comparator<T> comparator) {
+    private Stream<Integer> sampleParallelStream() {
+        return IntStream.range(0, 10)
+                .boxed()
+                .parallel()
+                .map(i -> i * i)
+                .filter(i -> i % 2 != 0);
+    }
+
+    private <T> Matcher<List<T>> sortedUsing(Comparator<T> comparator) {
         return new TypeSafeMatcher<List<T>>() {
             @Override
             protected boolean matchesSafely(List<T> list) {

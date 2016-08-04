@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.google.guava:guava:19.0'
     testCompile "org.openjdk.jmh:jmh-core:$jmhVersion"
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
     testCompile group: 'junit', name: 'junit', version: '4.11'

@@ -9,6 +9,8 @@ ext {
     jmhVersion = '1.13'
     junitVersion = '4.11'
     guavaVersion = '19.0'
+    wiremockVersion = "2.1.9"
+    durianVersion = "3.4.0"
 }
 
 repositories {
@@ -20,4 +22,6 @@ dependencies {
     testCompile "org.openjdk.jmh:jmh-core:$jmhVersion"
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
     testCompile "junit:junit:$junitVersion"
+    testCompile "com.github.tomakehurst:wiremock:$wiremockVersion"
+    testCompile "com.diffplug.durian:durian:$durianVersion"
 }

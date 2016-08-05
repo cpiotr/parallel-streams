@@ -45,7 +45,7 @@ public class KeepOrderTest {
                 .filter(i -> i % 2 != 0);
     }
 
-    private <T> Matcher<List<T>> sortedUsing(Comparator<T> comparator) {
+    private static <T> Matcher<List<T>> sortedUsing(Comparator<T> comparator) {
         return new TypeSafeMatcher<List<T>>() {
             @Override
             protected boolean matchesSafely(List<T> list) {

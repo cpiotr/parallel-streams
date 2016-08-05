@@ -1,40 +1,31 @@
 package _1_simple_stream;
 
-import org.junit.Test;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.TimeValue;
-import org.openjdk.jmh.runner.options.VerboseMode;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-public class IterationBenchmarkTest {
-    @Test
-    public void launchBenchmark() throws Exception {
-        Options opt = new OptionsBuilder()
-                .include(this.getClass().getSimpleName())
-                .mode(Mode.AverageTime)
-                .timeUnit(TimeUnit.MICROSECONDS)
-                .warmupIterations(5)
-                .measurementIterations(5)
-                .forks(1)
-                .shouldFailOnError(true)
-                .shouldDoGC(false)
-                .build();
-
-        new Runner(opt).run();
-    }
-
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(1)
+public class IterationBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
         @Setup(Level.Trial)
@@ -74,13 +65,7 @@ public class IterationBenchmarkTest {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(IterationBenchmarkTest.class.getSimpleName())
-                .warmupIterations(2)
-                .warmupTime(TimeValue.milliseconds(2))
-                .measurementIterations(2)
-                .measurementTime(TimeValue.milliseconds(2))
-                .verbosity(VerboseMode.NORMAL)
-                .forks(1)
+                .include(IterationBenchmark.class.getSimpleName())
                 .build();
 
         new Runner(opt).run();

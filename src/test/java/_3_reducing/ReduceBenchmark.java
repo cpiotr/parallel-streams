@@ -1,14 +1,19 @@
 package _3_reducing;
 
-import org.junit.Test;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
@@ -20,30 +25,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ReduceBenchmarkTest {
-    @Test
-    public void launchBenchmark() throws Exception {
-        Options opt = new OptionsBuilder()
-                .include(this.getClass().getSimpleName())
-                .mode(Mode.AverageTime)
-                .timeUnit(TimeUnit.MILLISECONDS)
-                .warmupIterations(5)
-                .measurementIterations(5)
-                .forks(1)
-                .shouldFailOnError(true)
-                .shouldDoGC(false)
-                .build();
-
-        new Runner(opt).run();
-    }
-
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(1)
+public class ReduceBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
         List<Integer> input;
         @Setup(Level.Trial)
 
-        public void
-        initialize() {
+        public void initialize() {
             input = IntStream.iterate(0, i -> i + 1)
                     .limit(100_000)
                     .boxed()
@@ -53,7 +46,7 @@ public class ReduceBenchmarkTest {
 
     @Benchmark
     public void serialAddToList(BenchmarkState state, Blackhole bh) {
-        List<Integer> list = new CopyOnWriteArrayList<>();
+        List<Integer> list = new ArrayList<>();
         state.input
                 .stream()
                 .forEach(list::add);
@@ -76,7 +69,7 @@ public class ReduceBenchmarkTest {
     public void serialReduce(BenchmarkState state, Blackhole bh) {
         List<Integer> list = state.input.stream()
                 .map(Arrays::asList)
-                .reduce(new ArrayList<>(), ReduceBenchmarkTest::concat);
+                .reduce(new ArrayList<>(), ReduceBenchmark::concat);
         bh.consume(list);
     }
 
@@ -85,7 +78,7 @@ public class ReduceBenchmarkTest {
         List<Integer> list = state.input.stream()
                 .parallel()
                 .map(Arrays::asList)
-                .reduce(new ArrayList<>(), ReduceBenchmarkTest::concat);
+                .reduce(new ArrayList<>(), ReduceBenchmark::concat);
         bh.consume(list);
     }
 
@@ -93,5 +86,13 @@ public class ReduceBenchmarkTest {
         List<T> both = new ArrayList<T>(first);
         both.addAll(second);
         return both;
+    }
+
+    public static void main(String[] args) throws RunnerException {
+        Options opt = new OptionsBuilder()
+                .include(ReduceBenchmark.class.getSimpleName())
+                .build();
+
+        new Runner(opt).run();
     }
 }

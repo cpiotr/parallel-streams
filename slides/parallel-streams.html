@@ -122,6 +122,105 @@ System.out.println(strings);
 					</section>
 				</section>
 
+				<section>
+					<section>
+						<h2>Performance</h2>
+						<pre class="fragment">
+# Intel(R) Core(TM) i7-4700HQ CPU @ 2.40GHz
+# JMH 1.13 (released 16 days ago)
+# VM version: JDK 1.8.0_101, VM 25.101-b13
+# Warmup: 10 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op</pre>
+					</section>
+					<section>
+						<h2>Iteration</h2>
+						<p>[µs/op]</p>
+						<table class="fragment">
+							<tr>
+								<th>Benchmark</th>
+								<th>Score</th>
+								<th>Error</th>
+							</tr>
+							<tr>
+								<td>SequentialIteration</td>
+								<td>2.632</td>
+								<td>0.095</td>
+							</tr>
+							<tr>
+								<td>SequentialStreamIteration</td>
+								<td>9.548</td>
+								<td>0.318</td>
+							</tr>
+							<tr>
+								<td>ParallelStreamIteration</td>
+								<td>32.293</td>
+								<td>0.259</td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<h2>Map and Collect</h2>
+						<p>[ms/op]</p>
+						<table class="fragment">
+							<tr>
+								<th>Benchmark</th>
+								<th>Score</th>
+								<th>Error</th>
+							</tr>
+							<tr>
+								<td>SerialStreamMapping</td>
+								<td>176.276</td>
+								<td>9.175</td>
+							</tr>
+							<tr>
+								<td>ParallelStreamMapping</td>
+								<td>1630.676</td>
+								<td>38.603</td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<h2>Reduce</h2>
+						<p>[ms/op]</p>
+						<table class="fragment">
+							<tr>
+								<th>Benchmark</th>
+								<th>Score</th>
+								<th>Error</th>
+							</tr>
+							<tr>
+								<td>SerialAddToList</td>
+								<td>0.463</td>
+								<td>0.004</td>
+							</tr>
+							<tr>
+								<td>SerialReduce</td>
+								<td>5285.358</td>
+								<td>99.035</td>
+							</tr>
+							<tr>
+								<td>ParallelAddToList</td>
+								<td>3248.174</td>
+								<td>24.943</td>
+							</tr>
+							<tr>
+								<td>ParallelReduce</td>
+								<td>148.057</td>
+								<td>0.558</td>
+							</tr>
+						</table>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Reduce operation</h2>
+					</section>
+				</section>
+
 				<!-- Example of nested vertical slides -->
 				<section>
 					<section>

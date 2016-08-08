@@ -85,7 +85,41 @@ Files.newBufferedReader(Paths.get("/home/piotr/.gitconfig"))
 				</section>
 
 				<section>
-					<h2>Stream ordering</h2>
+					<section>
+						<h2>Stream ordering</h2>
+						<p class="fragment">Encounter order</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+Set&lt;String&gt; set = Sets.newHashSet(
+		"Ala", "ma", "kota", "który", "jest", "niesforny");
+System.out.println(set);
+
+Collection&lt;String&gt; strings = set.parallelStream()
+                .map(String::toUpperCase)
+                .collect(toList());
+System.out.println(strings);
+					</code></pre>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+[kota, ma, Ala, niesforny, który, jest]
+[KOTA, MA, ALA, NIESFORNY, KTÓRY, JEST]
+					</code></pre>
+					</section>
+					<section>
+						<h2>Encounter order</h2>
+						<p class="fragment">Can affect performance for parallel streams</p>
+					</section>
+					<section>
+						<h2>Unordered termination</h2>
+						<p class="fragment">All conditions are true:</p>
+						<ul>
+							<li class="fragment">stream is parallel</li>
+							<li class="fragment">collector is <code>CONCURRENT</code></li>
+							<li class="fragment">stream or collector is <code>UNORDERED</code></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Demo</h2>
+						<p>Ordering</p>
+					</section>
 				</section>
 
 				<!-- Example of nested vertical slides -->

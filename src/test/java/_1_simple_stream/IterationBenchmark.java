@@ -22,9 +22,9 @@ import java.util.stream.IntStream;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Fork(1)
+@Warmup(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(2)
 public class IterationBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
@@ -66,6 +66,7 @@ public class IterationBenchmark {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(IterationBenchmark.class.getSimpleName())
+                .shouldDoGC(false)
                 .build();
 
         new Runner(opt).run();

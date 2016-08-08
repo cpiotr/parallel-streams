@@ -18,6 +18,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,9 +27,9 @@ import static java.util.stream.Collectors.toList;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Fork(1)
+@Warmup(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(2)
 public class MapAndCollectBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
@@ -37,8 +38,11 @@ public class MapAndCollectBenchmark {
 
         @Setup(Level.Trial)
         public void initialize() {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("sample-text-file.txt")));
-            strings = bufferedReader.lines().limit(1_000).collect(toList());
+            InputStream sampleFileAsStream = getClass().getClassLoader().getResourceAsStream("sample-text-file.txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sampleFileAsStream));
+            strings = bufferedReader.lines()
+                    .limit(1_000)
+                    .collect(toList());
         }
     }
 
@@ -52,7 +56,7 @@ public class MapAndCollectBenchmark {
     }
 
     @Benchmark
-    public void parallelStreamIteration(BenchmarkState state, Blackhole bh) {
+    public void parallelStreamMapping(BenchmarkState state, Blackhole bh) {
         List<Word> words = state.strings.stream()
                 .parallel()
                 .map(Sentence::new)
@@ -64,6 +68,7 @@ public class MapAndCollectBenchmark {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(MapAndCollectBenchmark.class.getSimpleName())
+                .shouldDoGC(false)
                 .build();
 
         new Runner(opt).run();

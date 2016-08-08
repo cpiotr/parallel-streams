@@ -7,7 +7,7 @@ sourceCompatibility = 1.8
 
 ext {
     jmhVersion = '1.13'
-    junitVersion = '4.11'
+    junitVersion = '4.12'
     guavaVersion = '19.0'
     wiremockVersion = "2.1.9"
     durianVersion = "3.4.0"

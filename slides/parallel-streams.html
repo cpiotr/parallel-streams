@@ -218,6 +218,46 @@ System.out.println(strings);
 				<section>
 					<section>
 						<h2>Reduce operation</h2>
+						<p class="fragment">example of <em>folding</em></p>
+						<p class="fragment">combines stream into single value</p>
+					</section>
+					<section>
+						<h2>Reduce operation</h2>
+						<img src="img/reduce.svg"/>
+					</section>
+					<section>
+						<h2>Reduce operation</h2>
+						<ul>
+							<li>identity</li>
+							<li>accumulator</li>
+							<li>combiner</li>
+						</ul>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+sampleCollection.stream()
+		.reduce(identity, accumulator, combiner);
+					</code></pre>
+					</section>
+					<section>
+						<h2>Reduce operation - identity</h2>
+						<p class="fragment">pick the <em>correct</em> one</p>
+						<p class="fragment">present in each fork of parallel processing</p>
+						<p class="fragment">immutable</p>
+					</section>
+					<section>
+						<h2>Reduce operation - accumulator</h2>
+						<p class="fragment">accumulate item with partial result</p>
+						<p class="fragment">associative <code class="fragment">(a+b)+c = a+(b+c)</code></p>
+					</section>
+					<section>
+						<h2>Reduce operation - combiner</h2>
+						<p class="fragment">combines partial results</p>
+						<p class="fragment">associative</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>ForkJoinPool</h2>
 					</section>
 				</section>
 

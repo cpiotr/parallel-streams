@@ -25,6 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HttpCallsTest {
@@ -38,6 +39,22 @@ public class HttpCallsTest {
     private CloseableHttpClient httpClient;
 
     private List<String> urls;
+
+    @Test(timeout = NUMBER_OF_URLS * DELAY_MILLIS * 2)
+    public void shouldExecuteRequestsInSerial() throws Exception {
+        int totalSerialDelay = urls.size() * DELAY_MILLIS;
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        urls.stream()
+                .map(url -> url + "slow")
+                .map(HttpGet::new)
+                .map(Errors.rethrow().wrapFunction(httpClient::execute))
+                .map(HttpResponse::getStatusLine)
+                .forEach(System.out::println);
+        stopwatch.stop();
+
+        assertThat(stopwatch.elapsed(TimeUnit.MILLISECONDS), is(not(lessThan(totalSerialDelay))));
+    }
 
     @Test(timeout = NUMBER_OF_URLS * DELAY_MILLIS * 2)
     public void shouldExecuteRequestsInParallel() throws Exception {

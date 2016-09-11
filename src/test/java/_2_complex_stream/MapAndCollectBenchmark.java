@@ -18,6 +18,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -38,11 +39,14 @@ public class MapAndCollectBenchmark {
 
         @Setup(Level.Trial)
         public void initialize() {
-            InputStream sampleFileAsStream = getClass().getClassLoader().getResourceAsStream("sample-text-file.txt");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sampleFileAsStream));
-            strings = bufferedReader.lines()
-                    .limit(1_000)
-                    .collect(toList());
+            try (InputStream sampleFileAsStream = getClass().getClassLoader().getResourceAsStream("sample-text-file.txt");
+                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sampleFileAsStream))) {
+                strings = bufferedReader.lines()
+                        .limit(1_000)
+                        .collect(toList());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -73,13 +73,17 @@
 					<section>
 						<h2>Example</h2>
 						<pre><code class="hljs" data-trim contenteditable>
-Files.newBufferedReader(Paths.get("/home/piotr/.gitconfig"))
-		.lines()
-		.map(String::trim)
-		.filter(line -> line.contains("="))
-		.map(line -> line.split(" = "))
-		.map(items -> String.format("[%s] : [%s]", items))
-		.forEach(System.out::println);
+try (BufferedReader reader =
+		Files.newBufferedReader(Paths.get("~/.gitconfig"))) {
+    reader.lines()
+            .map(String::trim)
+            .filter(line -> line.contains("="))
+            .map(line -> line.split(" = "))
+            .map(items -> String.format("[%s] : [%s]", items))
+            .forEach(System.out::println);
+} catch (IOException e) {
+    throw new RuntimeException(e);
+}
 					</code></pre>
 					</section>
 				</section>
@@ -106,6 +110,7 @@ System.out.println(strings);
 					<section>
 						<h2>Encounter order</h2>
 						<p class="fragment">Can affect performance for parallel streams</p>
+						<p class="fragment">Applies to terminal operations (e.g. <code>forEach</code>)</p>
 					</section>
 					<section>
 						<h2>Unordered termination</h2>
@@ -124,7 +129,7 @@ System.out.println(strings);
 
 				<section>
 					<section>
-						<h2>Performance</h2>
+						<h2>Stream Performance</h2>
 						<pre class="fragment">
 # Intel(R) Core(TM) i7-4700HQ CPU @ 2.40GHz
 # JMH 1.13 (released 16 days ago)

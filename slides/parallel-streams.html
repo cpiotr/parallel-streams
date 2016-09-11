@@ -262,6 +262,13 @@ sampleCollection.stream()
 
 				<section>
 					<section>
+						<h2>Blocking calls</h2>
+						<p class="fragment">Demo</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
 						<h2>ForkJoinPool</h2>
 						<p class="fragment">implements <code>ExecutorService</code></p>
 						<p class="fragment">optimized for tasks spawning other tasks</p>
@@ -289,9 +296,15 @@ ForkJoinPool.commonPool();
 					</section>
 					<section>
 						<h2>Concurrent vs Parallel</h2>
-						<p class="fragment">lot of waiting - concurrent</p>
+						<p class="fragment">a lot of waiting - concurrent</p>
 						<p class="fragment">performance gain also on one processor</p>
+						<p class="fragment">concurrency is hard :(</p>
 						<p class="fragment">dividable problem domain - parallel</p>
+					</section>
+					<section>
+						<h2>Concurrent vs Parallel</h2>
+						<p class="fragment">dividable problem domain - parallel</p>
+						<p class="fragment">parallel is easy</p>
 					</section>
 				</section>
 
@@ -311,8 +324,9 @@ ForkJoinPool.commonPool();
 					<section>
 						<h2>Alternatives</h2>
 						<p class="fragment">Custom pool</p>
-						<p class="fragment"></p>
-						<p class="fragment">CompletableFuture</p>
+						<p class="fragment">Changing size of common pool</p>
+						<p class="fragment"><code>CompletableFuture</code></p>
+						<p class="fragment">Demo</p>
 					</section>
 				</section>
 
